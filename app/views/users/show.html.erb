@@ -7,5 +7,17 @@
         <%= @user.name %>
       </h1>
     </section>
+    <section>
+      <%= link_to 'New Product', new_product_path %>
+    </section>
   </aside>
+  <div class="col-md-8">
+    <% if @user.products.any? %>
+      <h3>Products (<%= @user.products.count %>)</h3>
+      <ol class="products">
+        <%= render @products %>
+      </ol>
+      <%= will_paginate @products %>
+    <% end %>
+  </div>
 </div>

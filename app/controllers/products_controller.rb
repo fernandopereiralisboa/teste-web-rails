@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :logged_in_user, only: [:create, :destroy]
   def index
     @products = Product.all
   end
@@ -16,12 +17,12 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new(product_params)
-
+    @product = current_user.products.build(product_params)
     if @product.save
-      redirect_to @product
+      flash[:success] = "Product created!"
+      redirect_to root_url
     else
-      render 'new'
+      render 'static_pages/home'
     end
   end
 
@@ -29,7 +30,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
 
     if @product.update(product_params)
-      redirect_to @product
+      redirect_to root_url
     else
       render 'edit'
     end
@@ -39,7 +40,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
     @product.destroy
 
-    redirect_to products_path
+    redirect_to root_url
   end
 
   private
